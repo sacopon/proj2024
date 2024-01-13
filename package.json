@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite --host"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/sacopon/proj2024/issues"
   },
-  "homepage": "https://github.com/sacopon/proj2024#readme"
+  "homepage": "https://github.com/sacopon/proj2024#readme",
+  "devDependencies": {
+    "vite": "^5.0.11"
+  }
 }
