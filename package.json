@@ -6,9 +6,12 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite --host --port 8080",
-    "build": "vite build",
-    "preview": "npm run build && vite preview"
+    "clean": "rimraf ./dist && npm run clean:wasm",
+    "dev": "npm run build:wasm && vite --host --port 8080",
+    "build": "npm run build:wasm && vite build",
+    "preview": "npm run build && vite preview",
+    "clean:wasm": "pushd wasm && rimraf ./pkg ./target && popd",
+    "build:wasm": "pushd wasm && wasm-pack build --release --target web && popd"
   },
   "repository": {
     "type": "git",
@@ -24,7 +27,9 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "path": "^0.12.7",
+    "rimraf": "^5.0.5",
     "typescript": "^5.3.3",
-    "vite": "^5.0.11"
+    "vite": "^5.0.11",
+    "vite-plugin-wasm": "^3.3.0"
   }
 }
