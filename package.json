@@ -6,7 +6,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite --host"
+    "dev": "vite --host --port 8080",
+    "build": "vite build",
+    "preview": "npm run build && vite preview"
   },
   "repository": {
     "type": "git",
