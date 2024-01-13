@@ -1,0 +1,21 @@
+{
+  "name": "proj2024",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sacopon/proj2024.git"
+  },
+  "keywords": [],
+  "author": "sacopon.dev@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sacopon/proj2024/issues"
+  },
+  "homepage": "https://github.com/sacopon/proj2024#readme"
+}
