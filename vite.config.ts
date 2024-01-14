@@ -6,9 +6,4 @@ export default defineConfig({
 	plugins: [
 		wasm()
 	],
-	resolve: {
-		alias: {
-			"src": path.resolve(__dirname, "./src"),
-		}
-	}
 });
