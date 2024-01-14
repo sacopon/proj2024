@@ -1,20 +1,4 @@
-type Position = {
-	x: number;
-	y: number;
-};
-
-type Size = {
-	width: number;
-	height: number;
-};
-
-type SafeArea = Position & Size & {
-	left: number;
-	top: number;
-	right: number;
-	bottom: number;
-	center: Position;
-};
+import { Size, SafeArea } from "../core/types";
 
 /**
  * 画面サイズに関わる設定とその値の保持

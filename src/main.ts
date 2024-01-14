@@ -1,11 +1,10 @@
 import { Application, Sprite, Assets, Container } from "pixi.js";
 import init, { greet } from "../wasm/pkg";
-import { Screen } from "./application/utilities/screen";
-import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./application/utilities/disable_touch_event";
-import { SceneRootContainer } from "./presentation/core/scene_root_container";
+import { Screen } from "./presentation/utilities/screen";
+import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./presentation/utilities/disable_touch_event";
+import { SceneRootContainer } from "./presentation/common/scene_root_container";
 
 class Proj2024 {
-	private static m_instance: Proj2024 | null = null;
 	private m_screen: Screen;
 	private m_app: Application;
 	private m_state = 0;
@@ -19,8 +18,7 @@ class Proj2024 {
 	public static async run() {
 		// WebAssembly モジュール初期化
 		await init();
-
-		this.m_instance = new Proj2024();
+		const instance = new Proj2024();
 	}
 
 	public constructor() {

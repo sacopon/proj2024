@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
-import { Position, Size } from "./types";
-import { Screen } from "../../application/utilities/screen";
+import { Position, Size } from "../core/types";
+import { Screen } from "../utilities/screen";
 
 type ScreenInfo = Position & Size;
 
