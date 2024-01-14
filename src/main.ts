@@ -10,6 +10,7 @@ class Proj2024 {
 	private m_state = 0;
 	private m_sprite: Sprite | null = null;
 	private s2: Sprite[] = [];
+	private m_sceneRoot: Container;
 
 	/**
 	 * エントリーポイント
@@ -51,21 +52,30 @@ class Proj2024 {
 		if (this.m_state === 0) {
 			++this.m_state;
 
+			// シーンのルートオブジェクトをセーフエリアの位置に配置
+			// 原点がセーフエリア左上となる
+			// TODO: ↑混乱するので、SceneRootContainer をクラスとして作成し、
+			// 原点、サイズ、画面左上(セーフエリア外)、画面サイズ(セーフエリアより大きい)を取得できるようにまとめる
+			this.m_sceneRoot = new Container();
+			this.m_app.stage.addChild(this.m_sceneRoot);
+			this.m_sceneRoot.x = this.m_screen.safeArea.x;
+			this.m_sceneRoot.y = this.m_screen.safeArea.y;
+
 			Assets.addBundle("resources", [
 				{alias: "neko", src: "/images/neko.jpg"},
 				{alias: "s", src: "/images/s.png"},
 			]);
 			await Assets.loadBundle("resources");
 			this.m_sprite = Sprite.from(Assets.get("neko"));
-			this.m_app.stage.addChild(this.m_sprite);
+			this.m_sceneRoot.addChild(this.m_sprite);
 
 			const sprite = this.m_sprite!;
-			sprite.x = Math.floor((this.m_app.screen.width - sprite.width) / 2);
-			sprite.y = Math.floor((this.m_app.screen.height - sprite.height) / 2);
+			sprite.x = Math.floor(this.m_screen.safeArea.width  / 2 - sprite.width  / 2);
+			sprite.y = Math.floor(this.m_screen.safeArea.height / 2 - sprite.height / 2);
 
 			for (let i = 0; i < 4; ++i) {
 				this.s2.push(Sprite.from(Assets.get("s")));
-				this.m_app.stage.addChild(this.s2[i]);
+				this.m_sceneRoot.addChild(this.s2[i]);
 			}
 
 			this.setSpritePos();
@@ -76,13 +86,8 @@ class Proj2024 {
 		this.m_screen = new Screen(window.innerWidth, window.innerHeight);
 		this.m_app.renderer.resize(this.m_screen.size.width, this.m_screen.size.height);
 
-		// TODO: Sprite ではなくメインのルートコンテナの配置をセンタリングする
-		// TODO: ルートコンテナは screen の幅/高さと、実際の innerWidth/innerHeight から算出した中央に配置
-		const sprite = this.m_sprite!;
-		sprite.x = Math.floor((this.m_app.screen.width - sprite.width) / 2);
-		sprite.y = Math.floor((this.m_app.screen.height - sprite.height) / 2);
-
-		this.setSpritePos();
+		this.m_sceneRoot.x = this.m_screen.safeArea.x;
+		this.m_sceneRoot.y = this.m_screen.safeArea.y;
 	}
 
 	public setSpritePos() {
@@ -94,23 +99,23 @@ class Proj2024 {
 
 		// 左上
 		s = this.s2[0];
-		s.x = this.m_screen.safeArea.left;
-		s.y = this.m_screen.safeArea.top;
+		s.x = 0;
+		s.y = 0;
 
 		// 右上
 		s = this.s2[1];
-		s.x = this.m_screen.safeArea.right - s.width;
-		s.y = this.m_screen.safeArea.top;
+		s.x = this.m_screen.safeArea.width - s.width;
+		s.y = 0;
 
 		// 左下
 		s = this.s2[2];
-		s.x = this.m_screen.safeArea.left;
-		s.y = this.m_screen.safeArea.bottom - s.height;
+		s.x = 0;
+		s.y = this.m_screen.safeArea.height - s.height;
 
 		// 右下
 		s = this.s2[3];
-		s.x = this.m_screen.safeArea.right - s.width;
-		s.y = this.m_screen.safeArea.bottom - s.height;
+		s.x = this.m_screen.safeArea.width  - s.width;
+		s.y = this.m_screen.safeArea.height - s.height;
 	}
 }
 

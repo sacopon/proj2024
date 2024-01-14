@@ -1,20 +1,32 @@
+type Position = {
+	x: number;
+	y: number;
+};
+
+type Size = {
+	width: number;
+	height: number;
+};
+
+type SafeArea = Position & Size & {
+	left: number;
+	top: number;
+	right: number;
+	bottom: number;
+	center: Position;
+};
+
+/**
+ * 画面サイズに関わる設定とその値の保持
+ */
 export class Screen {
 	private static readonly SAFE_AREA_WIDTH = 1280;
 	private static readonly SAFE_AREA_HEIGHT = 720;
 	private static readonly MAXIMUM_HEIGHT = 800;
 	private m_innerWidth: number;
 	private m_innerHeight: number;
-	private m_screenSize: {width: number, height: number};
-	private m_safeArea: {
-		x: number,
-		y: number,
-		width: number,
-		height: number,
-		left: number,
-		top: number,
-		right: number,
-		bottom: number,
-	};
+	private m_screenSize: Size;
+	private m_safeArea: SafeArea;
 
 	public constructor(innerWidth: number, innerHeight: number) {
 		this.m_innerWidth = innerWidth;
@@ -50,7 +62,7 @@ export class Screen {
 	/**
 	 * 実画面サイズからゲーム画面サイズを計算する
 	 */
-	private static calculateScreenSize(innerWidth: number, innerHeight: number): { width: number, height: number } {
+	private static calculateScreenSize(innerWidth: number, innerHeight: number): Size {
 		// 16:9 より細長い場合は縦720pxを基準に画面サイズを設定
 		// それより太い場合は縦800pxを基準に画面サイズを設定
 		const aspect_ratio = Math.max(innerWidth / innerHeight, 16 / 10);
@@ -65,16 +77,7 @@ export class Screen {
 	/**
 	 * 実画面サイズから、必ず表示される領域の位置、サイズを計算する
 	 */
-	private static calculateSafeArea(screenSize: {width: number, height: number}): {
-		x: number,
-		y: number,
-		width: number,
-		height: number,
-		left: number,
-		top: number,
-		right: number,
-		bottom: number,
-	} {
+	private static calculateSafeArea(screenSize: Size): SafeArea {
 		const x = Math.floor((screenSize.width  - Screen.SAFE_AREA_WIDTH) / 2);
 		const y = Math.floor((screenSize.height -  Screen.SAFE_AREA_HEIGHT) / 2);
 
@@ -87,6 +90,10 @@ export class Screen {
 			top: y,
 			right: x + Screen.SAFE_AREA_WIDTH,
 			bottom: y + Screen.SAFE_AREA_HEIGHT,
+			center: {
+				x: x + Math.floor(Screen.SAFE_AREA_WIDTH  / 2),
+				y: y + Math.floor(Screen.SAFE_AREA_HEIGHT / 2),
+			},
 		};
 	}
 }
