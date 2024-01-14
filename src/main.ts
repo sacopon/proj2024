@@ -5,9 +5,11 @@ import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./application/u
 
 class Proj2024 {
 	private static m_instance: Proj2024 | null = null;
+	private m_screen: Screen;
 	private m_app: Application;
 	private m_state = 0;
 	private m_sprite: Sprite | null = null;
+	private s2: Sprite[] = [];
 
 	/**
 	 * エントリーポイント
@@ -20,15 +22,15 @@ class Proj2024 {
 	}
 
 	public constructor() {
-		const screenSize = Screen.calculateScreenSize();
+		this.m_screen = new Screen(window.innerWidth, window.innerHeight);
 
 		// pixi.js 初期化
 		this.m_app = new Application({
 			background: 0xFF00FF,
 			antialias: false,
 			backgroundAlpha: 1,
-			width: screenSize.width,
-			height: screenSize.height,
+			width: this.m_screen.size.width,
+			height: this.m_screen.size.height,
 		});
 
 		// キャンバス設置
@@ -61,25 +63,54 @@ class Proj2024 {
 			sprite.x = Math.floor((this.m_app.screen.width - sprite.width) / 2);
 			sprite.y = Math.floor((this.m_app.screen.height - sprite.height) / 2);
 
-			const s1 = Sprite.from(Assets.get("s"));
-			this.m_app.stage.addChild(s1);
+			for (let i = 0; i < 4; ++i) {
+				this.s2.push(Sprite.from(Assets.get("s")));
+				this.m_app.stage.addChild(this.s2[i]);
+			}
 
-			const s2 = Sprite.from(Assets.get("s"));
-			s2.x = Math.floor((this.m_app.screen.width - s2.width) / 2);
-			s2.y = Math.floor((this.m_app.screen.height - s2.height) / 2);
-			this.m_app.stage.addChild(s2);
+			this.setSpritePos();
 		}
 	}
 
 	public onResize() {
-		const size = ScreenUtility.calculateScreenSize();
-		this.m_app.renderer.resize(size.width, size.height);
+		this.m_screen = new Screen(window.innerWidth, window.innerHeight);
+		this.m_app.renderer.resize(this.m_screen.size.width, this.m_screen.size.height);
 
 		// TODO: Sprite ではなくメインのルートコンテナの配置をセンタリングする
 		// TODO: ルートコンテナは screen の幅/高さと、実際の innerWidth/innerHeight から算出した中央に配置
 		const sprite = this.m_sprite!;
 		sprite.x = Math.floor((this.m_app.screen.width - sprite.width) / 2);
 		sprite.y = Math.floor((this.m_app.screen.height - sprite.height) / 2);
+
+		this.setSpritePos();
+	}
+
+	public setSpritePos() {
+		let s: Sprite;
+
+		for (let s of this.s2) {
+			s.x = s.y = 0;
+		}
+
+		// 左上
+		s = this.s2[0];
+		s.x = this.m_screen.safeArea.left;
+		s.y = this.m_screen.safeArea.top;
+
+		// 右上
+		s = this.s2[1];
+		s.x = this.m_screen.safeArea.right - s.width;
+		s.y = this.m_screen.safeArea.top;
+
+		// 左下
+		s = this.s2[2];
+		s.x = this.m_screen.safeArea.left;
+		s.y = this.m_screen.safeArea.bottom - s.height;
+
+		// 右下
+		s = this.s2[3];
+		s.x = this.m_screen.safeArea.right - s.width;
+		s.y = this.m_screen.safeArea.bottom - s.height;
 	}
 }
 

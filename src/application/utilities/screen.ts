@@ -1,4 +1,35 @@
 export class Screen {
+	private static readonly SAFE_AREA_WIDTH = 1280;
+	private static readonly SAFE_AREA_HEIGHT = 720;
+	private static readonly MAXIMUM_HEIGHT = 800;
+	private m_innerWidth: number;
+	private m_innerHeight: number;
+	private m_screenSize: {width: number, height: number};
+	private m_safeArea: {
+		x: number,
+		y: number,
+		width: number,
+		height: number,
+		left: number,
+		top: number,
+		right: number,
+		bottom: number,
+	};
+
+	public constructor(innerWidth: number, innerHeight: number) {
+		this.m_innerWidth = innerWidth;
+		this.m_innerHeight = innerHeight;
+		this.m_screenSize = Screen.calculateScreenSize(this.m_innerWidth, this.m_innerHeight);
+		this.m_safeArea = Screen.calculateSafeArea(this.m_screenSize);
+	}
+
+	public get size(): {width: number, height: number} {
+		return this.m_screenSize;
+	}
+
+	public get safeArea() {
+		return this.m_safeArea;
+	}
 	/**
 	 * キャンバスにセンタリングされるよう CSS を設定する
 	 *
@@ -19,15 +50,43 @@ export class Screen {
 	/**
 	 * 実画面サイズからゲーム画面サイズを計算する
 	 */
-	public static calculateScreenSize(): { width: number, height: number } {
+	private static calculateScreenSize(innerWidth: number, innerHeight: number): { width: number, height: number } {
 		// 16:9 より細長い場合は縦720pxを基準に画面サイズを設定
 		// それより太い場合は縦800pxを基準に画面サイズを設定
-		const aspectRatio = Math.max(window.innerWidth / window.innerHeight, 16 / 10);
-		const height = aspectRatio < 16 / 9 ? 800 : 720;
+		const aspect_ratio = Math.max(innerWidth / innerHeight, 16 / 10);
+		const height = aspect_ratio < 16 / 9 ? Screen.MAXIMUM_HEIGHT : Screen.SAFE_AREA_HEIGHT;
 
 		return {
-			width: Math.floor(height * aspectRatio),
+			width: Math.floor(height * aspect_ratio),
 			height,
+		};
+	}
+
+	/**
+	 * 実画面サイズから、必ず表示される領域の位置、サイズを計算する
+	 */
+	private static calculateSafeArea(screenSize: {width: number, height: number}): {
+		x: number,
+		y: number,
+		width: number,
+		height: number,
+		left: number,
+		top: number,
+		right: number,
+		bottom: number,
+	} {
+		const x = Math.floor((screenSize.width  - Screen.SAFE_AREA_WIDTH) / 2);
+		const y = Math.floor((screenSize.height -  Screen.SAFE_AREA_HEIGHT) / 2);
+
+		return {
+			x,
+			y,
+			width: Screen.SAFE_AREA_WIDTH,
+			height: Screen.SAFE_AREA_HEIGHT,
+			left: x,
+			top: y,
+			right: x + Screen.SAFE_AREA_WIDTH,
+			bottom: y + Screen.SAFE_AREA_HEIGHT,
 		};
 	}
 }
