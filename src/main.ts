@@ -49,17 +49,25 @@ class Proj2024 {
 		if (this.m_state === 0) {
 			++this.m_state;
 
-			Assets.add({
-				alias: "neko",
-				src: "/images/neko.jpg",
-			});
-			await Assets.load(["neko"]);
+			Assets.addBundle("resources", [
+				{alias: "neko", src: "/images/neko.jpg"},
+				{alias: "s", src: "/images/s.png"},
+			]);
+			await Assets.loadBundle("resources");
 			this.m_sprite = Sprite.from(Assets.get("neko"));
 			this.m_app.stage.addChild(this.m_sprite);
 
 			const sprite = this.m_sprite!;
 			sprite.x = Math.floor((this.m_app.screen.width - sprite.width) / 2);
 			sprite.y = Math.floor((this.m_app.screen.height - sprite.height) / 2);
+
+			const s1 = Sprite.from(Assets.get("s"));
+			this.m_app.stage.addChild(s1);
+
+			const s2 = Sprite.from(Assets.get("s"));
+			s2.x = Math.floor((this.m_app.screen.width - s2.width) / 2);
+			s2.y = Math.floor((this.m_app.screen.height - s2.height) / 2);
+			this.m_app.stage.addChild(s2);
 		}
 	}
 
