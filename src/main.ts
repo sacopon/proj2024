@@ -1,6 +1,7 @@
 import { Application, Sprite, Assets, Container } from "pixi.js";
 import init, { greet } from "../wasm/pkg";
 import { ScreenUtility } from "./application/utilities/screen_utility";
+import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./application/utilities/disable_touch_event";
 
 class Proj2024 {
 	private static m_instance: Proj2024 | null = null;
@@ -32,12 +33,15 @@ class Proj2024 {
 
 		// キャンバス設置
 		document.body.appendChild(ScreenUtility.setToCenter(this.m_app.view as HTMLCanvasElement));
-
-		// 更新メソッド登録
-		this.m_app.ticker.add(delta => this.update(delta));
+		// OS 由来のタッチイベント排除
+		disableTouchEvent(this.m_app.view as unknown as HTMLElement);
+		disableOuterCanvasTouchEvent();
 
 		// リサイズ処理登録
 		window.addEventListener("resize", () => this.onResize());
+
+		// 更新メソッド登録
+		this.m_app.ticker.add(delta => this.update(delta));
 	}
 
 	public async update(delta: number) {
