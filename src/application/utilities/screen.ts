@@ -1,4 +1,4 @@
-export class ScreenUtility {
+export class Screen {
 	/**
 	 * キャンバスにセンタリングされるよう CSS を設定する
 	 *

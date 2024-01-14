@@ -1,6 +1,6 @@
 import { Application, Sprite, Assets, Container } from "pixi.js";
 import init, { greet } from "../wasm/pkg";
-import { ScreenUtility } from "./application/utilities/screen_utility";
+import { Screen } from "./application/utilities/screen";
 import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./application/utilities/disable_touch_event";
 
 class Proj2024 {
@@ -20,7 +20,7 @@ class Proj2024 {
 	}
 
 	public constructor() {
-		const screenSize = ScreenUtility.calculateScreenSize();
+		const screenSize = Screen.calculateScreenSize();
 
 		// pixi.js 初期化
 		this.m_app = new Application({
@@ -32,7 +32,7 @@ class Proj2024 {
 		});
 
 		// キャンバス設置
-		document.body.appendChild(ScreenUtility.setToCenter(this.m_app.view as HTMLCanvasElement));
+		document.body.appendChild(Screen.setToCenter(this.m_app.view as HTMLCanvasElement));
 		// OS 由来のタッチイベント排除
 		disableTouchEvent(this.m_app.view as unknown as HTMLElement);
 		disableOuterCanvasTouchEvent();
