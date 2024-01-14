@@ -3,6 +3,7 @@ import init, { greet } from "../wasm/pkg";
 import { Screen } from "./presentation/utilities/screen";
 import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./presentation/utilities/disable_touch_event";
 import { SceneRootContainer } from "./presentation/common/scene_root_container";
+import { KeyboardInput } from "./presentation/input/keyboard_input";
 
 class Proj2024 {
 	private m_screen: Screen;
@@ -11,6 +12,7 @@ class Proj2024 {
 	private m_sprite: Sprite | null = null;
 	private s2: Sprite[] = [];
 	private m_sceneRoot: SceneRootContainer;
+	private m_keyboard = new KeyboardInput();
 
 	/**
 	 * エントリーポイント
@@ -42,11 +44,30 @@ class Proj2024 {
 		// リサイズ処理登録
 		window.addEventListener("resize", () => this.onResize());
 
+		// キーボード入力
+		window.addEventListener("keydown", e => this.m_keyboard.onKeyDown(e));
+		window.addEventListener("keyup", e => this.m_keyboard.onKeyUp(e));
+
 		// 更新メソッド登録
 		this.m_app.ticker.add(delta => this.update(delta));
 	}
 
 	public async update(delta: number) {
+		this.m_keyboard.onUpdate(delta);
+
+		if (this.m_keyboard.isTriggered(KeyboardInput.KEY_A)) { console.log('A'); }
+		if (this.m_keyboard.isTriggered(KeyboardInput.KEY_B)) { console.log('B'); }
+		if (this.m_keyboard.isTriggered(KeyboardInput.KEY_UP)) { console.log('↑'); }
+		if (this.m_keyboard.isTriggered(KeyboardInput.KEY_DOWN)) { console.log('↓'); }
+		if (this.m_keyboard.isTriggered(KeyboardInput.KEY_LEFT)) { console.log('←'); }
+		if (this.m_keyboard.isTriggered(KeyboardInput.KEY_RIGHT)) { console.log('→'); }
+		// if (this.m_keyboard.isPressing(KeyboardInput.KEY_A)) { console.log('A'); }
+		// if (this.m_keyboard.isPressing(KeyboardInput.KEY_B)) { console.log('B'); }
+		// if (this.m_keyboard.isPressing(KeyboardInput.KEY_UP)) { console.log('↑'); }
+		// if (this.m_keyboard.isPressing(KeyboardInput.KEY_DOWN)) { console.log('↓'); }
+		// if (this.m_keyboard.isPressing(KeyboardInput.KEY_LEFT)) { console.log('←'); }
+		// if (this.m_keyboard.isPressing(KeyboardInput.KEY_RIGHT)) { console.log('→'); }
+
 		// 毎フレームの更新処理
 		if (this.m_state === 0) {
 			++this.m_state;
