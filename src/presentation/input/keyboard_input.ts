@@ -1,4 +1,5 @@
 export class KeyboardInput {
+	// TODO: enum にする
 	public static readonly KEY_UP    = 0x01 << 1;
 	public static readonly KEY_DOWN  = 0x01 << 2;
 	public static readonly KEY_LEFT  = 0x01 << 3;
@@ -12,9 +13,9 @@ export class KeyboardInput {
 	private m_rightKeys: String[];
 	private m_buttonAKeys: String[];
 	private m_buttonBKeys: String[];
-	private m_currentKeyStatus;
-	private m_prevKeyStatus;
-	private m_tempKeyStatus;
+	private m_currentKeyStatus = 0;
+	private m_prevKeyStatus = 0;
+	private m_tempKeyStatus = 0;
 
 	public constructor() {
 		this.m_upKeys = ["ArrowUp"];
@@ -23,6 +24,17 @@ export class KeyboardInput {
 		this.m_rightKeys = ["ArrowRight"];
 		this.m_buttonAKeys = [" ", "　", "z", "Z"];
 		this.m_buttonBKeys = ["Shift", "x", "X"];
+	}
+
+	public static get keyCode() {
+		return {
+			KEY_UP: KeyboardInput.KEY_UP,
+			KEY_DOWN: KeyboardInput.KEY_DOWN,
+			KEY_LEFT: KeyboardInput.KEY_LEFT,
+			KEY_RIGHT: KeyboardInput.KEY_RIGHT,
+			KEY_A: KeyboardInput.KEY_A,
+			KEY_B: KeyboardInput.KEY_B,
+		};
 	}
 
 	public status() {
