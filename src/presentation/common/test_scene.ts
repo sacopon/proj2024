@@ -1,8 +1,11 @@
 import { Assets, Container, Sprite } from "pixi.js"
 import { Screen } from "../utilities/screen"
-import { SceneRootContainer } from "./scene_root_container"
+import { Scene, SceneParameter } from "../core/scene";
 
-export class TestScene extends SceneRootContainer {
+/**
+ * テスト用のシーン
+ */
+export class TestScene extends Scene {
 	private m_sprite: Sprite | null = null;
 	private s2: Sprite[] = [];
 	private m_character: Sprite | null = null;
@@ -11,16 +14,17 @@ export class TestScene extends SceneRootContainer {
 		super(screen, stage);
 	}
 
-	public async request() {
+	public async request(): Promise<SceneParameter> {
 		Assets.addBundle("resources", [
 			{ alias: "neko", src: "/images/neko.jpg" },
 			{ alias: "s", src: "/images/s.png" },
 			{ alias: "characters", src: "/images/characters.json" },
 		]);
-		await Assets.loadBundle("resources");
+
+		return Assets.loadBundle("resources");
 	}
 
-	public async onEnter() {
+	public async onEnter(): Promise<void> {
 		this.m_sprite = Sprite.from(Assets.get("neko"));
 		this.addChild(this.m_sprite);
 

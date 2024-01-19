@@ -3,7 +3,7 @@ import { Position, Size } from "../core/types";
 import { Screen } from "../utilities/screen";
 import { PresentationServiceLocator } from "../core/presentation_service_locator";
 
-type ScreenInfo = Position & Size;
+export type ScreenInfo = Position & Size;
 
 /**
  * シーンの最上段に置かれたコンテナ

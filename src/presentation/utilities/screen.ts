@@ -2,6 +2,7 @@ import { Size, SafeArea } from "../core/types";
 
 /**
  * 画面サイズに関わる設定とその値の保持
+ * TODO: 名前が標準のクラスと被っているので変更する
  */
 export class Screen {
 	private static readonly SAFE_AREA_WIDTH = 1280;
