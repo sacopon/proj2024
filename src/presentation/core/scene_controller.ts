@@ -1,5 +1,6 @@
 import { Scene, SceneParameter } from "./scene";
 import { Screen } from "../utilities/screen";
+import { Assets } from "pixi.js";
 
 /**
  * 現在のシーンと、シーンの遷移を司るクラス
@@ -9,7 +10,7 @@ export class SceneController {
 	private m_nextScene: Scene | null;
 
 	/**
-	 * コンストラクタ.
+	 * コンストラクタ
 	 *
 	 * @param initialScene 最初のシーン
 	 */
@@ -29,7 +30,11 @@ export class SceneController {
 		if (this.m_nextScene) {
 			this.m_currentScene = this.m_nextScene;
 			this.m_nextScene = null;
-			const params = await this.m_currentScene.request();
+			Assets.addBundle("resources", this.m_currentScene.getStaticResources());
+			await Assets.loadBundle("resources");
+
+			// TODO: request の引数は前のシーンから取得する
+			const params = await this.m_currentScene.request({});
 			await this.m_currentScene.onEnter(params);
 		}
 

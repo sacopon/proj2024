@@ -14,17 +14,15 @@ export class TestScene extends Scene {
 		super(screen, stage);
 	}
 
-	public async request(): Promise<SceneParameter> {
-		Assets.addBundle("resources", [
+	getStaticResources(): { alias: string, src: string }[] {
+		return [
 			{ alias: "neko", src: "/images/neko.jpg" },
 			{ alias: "s", src: "/images/s.png" },
 			{ alias: "characters", src: "/images/characters.json" },
-		]);
-
-		return Assets.loadBundle("resources");
+		];
 	}
 
-	public async onEnter(): Promise<void> {
+	public async onEnter(_: SceneParameter): Promise<void> {
 		this.m_sprite = Sprite.from(Assets.get("neko"));
 		this.addChild(this.m_sprite);
 
@@ -46,7 +44,7 @@ export class TestScene extends Scene {
 		this.m_character.y = this.center.y - Math.floor(this.m_character.height / 2);
 	}
 
-	public onUpdate(delta: number) {
+	public onUpdate(_: number) {
 		const character = this.m_character!;
 
 		if (this.keyboard.isTriggered(this.keyCode.KEY_UP)) {
