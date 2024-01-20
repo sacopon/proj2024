@@ -1,6 +1,7 @@
 import { Assets, Container, Sprite } from "pixi.js"
 import { ScreenInfo } from "../utilities/screen_info"
 import { Scene, SceneParameter } from "../core/scene";
+import { GameInput } from "../input/game_input";
 
 /**
  * テスト用のシーン
@@ -47,19 +48,19 @@ export class TestScene extends Scene {
 	public onUpdate(_: number) {
 		const character = this.m_character!;
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_UP)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_UP)) {
 			character.texture = Assets.get("characters").textures["chara1_up_1.png"];
 		}
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_DOWN)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_DOWN)) {
 			character.texture = Assets.get("characters").textures["chara1_down_1.png"];
 		}
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_LEFT)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_LEFT)) {
 			character.texture = Assets.get("characters").textures["chara1_left_1.png"];
 		}
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_RIGHT)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_RIGHT)) {
 			character.texture = Assets.get("characters").textures["chara1_right_1.png"];
 		}
 	}

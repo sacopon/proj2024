@@ -2,16 +2,16 @@ import { Application, Sprite, Assets, Container } from "pixi.js";
 import init, { greet } from "../wasm/pkg";
 import { ScreenInfo } from "./presentation/utilities/screen_info";
 import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./presentation/utilities/disable_touch_event";
-import { KeyboardInput } from "./presentation/input/keyboard_input";
 import { TestScene } from "./presentation/common/test_scene";
 import { PresentationServiceLocator } from "./presentation/core/presentation_service_locator";
 import { SceneController } from "./presentation/core/scene_controller";
+import { GameInput } from "./presentation/input/game_input";
+import { KeyboardInput } from "./presentation/input/keyboard_input";
 
 class Proj2024 {
 	private m_screen: ScreenInfo;
 	private m_app: Application;
 	private m_sceneController: SceneController;
-	private m_keyboard = new KeyboardInput();
 
 	/**
 	 * エントリーポイント
@@ -44,9 +44,12 @@ class Proj2024 {
 		window.addEventListener("resize", () => this.onResize());
 
 		// キーボード入力
-		PresentationServiceLocator.keyboard = this.m_keyboard;
-		window.addEventListener("keydown", e => this.m_keyboard.onKeyDown(e));
-		window.addEventListener("keyup", e => this.m_keyboard.onKeyUp(e));
+		PresentationServiceLocator.keyboardInput = new KeyboardInput();
+		window.addEventListener("keydown", e => PresentationServiceLocator.keyboardInput.onKeyDown(e));
+		window.addEventListener("keyup", e => PresentationServiceLocator.keyboardInput.onKeyUp(e));
+
+		// 統一入力
+		PresentationServiceLocator.gameInput = new GameInput();
 
 		// シーン登録
 		this.m_sceneController = new SceneController(new TestScene(this.m_screen, this.m_app.stage));
@@ -56,7 +59,7 @@ class Proj2024 {
 	}
 
 	public async update(delta: number) {
-		this.m_keyboard.onUpdate(delta);
+		PresentationServiceLocator.keyboardInput.onUpdate();
 		this.m_sceneController.onUpdate(delta);
 	}
 

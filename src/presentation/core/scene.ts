@@ -2,6 +2,7 @@ import { Container } from "pixi.js";
 import { SceneRootContainer } from "../common/scene_root_container";
 import { ScreenInfo } from "../utilities/screen_info";
 import { Position, Size } from "./types";
+import { PresentationServiceLocator } from "./presentation_service_locator";
 
 export abstract class SceneParameter {
 }
@@ -35,16 +36,8 @@ export abstract class Scene extends Container {
 		return this.m_root.screen;
 	}
 
-	// TODO: KeyboardInput を直接扱わないようにする
-	// TODO: SceneRootConatiner から移動してくる
-	public get keyboard() {
-		return this.m_root.keyboard;
-	}
-
-	// TODO: KeyboardInput を直接扱わないようにする
-	// TODO: SceneRootConatiner から移動してくる
-	public get keyCode() {
-		return this.m_root.keyCode;
+	public get gameInput() {
+		return PresentationServiceLocator.gameInput;
 	}
 
 	/**

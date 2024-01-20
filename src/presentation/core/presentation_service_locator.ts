@@ -1,17 +1,23 @@
+import { GameInput } from "../input/game_input";
 import { KeyboardInput } from "../input/keyboard_input";
 
 export class PresentationServiceLocator {
+	private static m_gameInput: GameInput | null = null;
 	private static m_keyboardInput: KeyboardInput | null = null;
 
-	public static get keyboard() {
-		return PresentationServiceLocator.m_keyboardInput!;
+	public static get gameInput() {
+		return PresentationServiceLocator.m_gameInput!;
 	}
 
-	public static set keyboard(keyboard_: KeyboardInput) {
-		PresentationServiceLocator.m_keyboardInput = keyboard_;
+	public static set gameInput(gameInput_: GameInput) {
+		PresentationServiceLocator.m_gameInput = gameInput_;
 	}
 
-	public static get keyCode() {
-		return KeyboardInput.keyCode;
+	public static get keyboardInput() {
+		return this.m_keyboardInput!;
+	}
+
+	public static set keyboardInput(keyboardInput_: KeyboardInput) {
+		this.m_keyboardInput = keyboardInput_;
 	}
 }

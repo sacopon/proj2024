@@ -2,6 +2,7 @@ import { Container } from "pixi.js";
 import { Position } from "../core/types";
 import { ScreenInfo } from "../utilities/screen_info";
 import { PresentationServiceLocator } from "../core/presentation_service_locator";
+import { GameInput } from "../input/game_input";
 
 /**
  * シーンの最上段に置かれたコンテナ
@@ -46,15 +47,6 @@ export class SceneRootContainer extends Container {
 			width: this.m_screen.size.width,
 			height: this.m_screen.size.height,
 		};
-	}
-
-	// TODO: KeyboardInput を直接扱わないようにする
-	public get keyboard() {
-		return PresentationServiceLocator.keyboard;
-	}
-
-	public get keyCode() {
-		return PresentationServiceLocator.keyCode;
 	}
 
 	private setPos(screen: ScreenInfo) {
