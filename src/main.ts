@@ -33,6 +33,9 @@ class Proj2024 {
 			height: PresentationServiceLocator.screenInfo.size.height,
 		});
 
+		// stage 登録
+		PresentationServiceLocator.stage = this.m_app.stage;
+
 		// キャンバス設置
 		document.body.appendChild(ScreenInfo.setToCenter(this.m_app.view as HTMLCanvasElement));
 		// OS 由来のタッチイベント排除
@@ -51,7 +54,7 @@ class Proj2024 {
 		PresentationServiceLocator.gameInput = new GameInput();
 
 		// シーン登録
-		this.m_sceneController = new SceneController(new TestScene(this.m_app.stage));
+		this.m_sceneController = new SceneController(new TestScene());
 
 		// 更新メソッド登録
 		this.m_app.ticker.add(delta => this.update(delta));

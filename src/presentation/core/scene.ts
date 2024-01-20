@@ -13,10 +13,9 @@ export abstract class SceneParameter {
 export abstract class Scene extends Container {
 	private m_root: SceneRootContainer;
 
-	// TODO: 引数は ServiceLocator に入れてしまう
-	public constructor(stage: Container) {
+	public constructor() {
 		super();
-		this.m_root = new SceneRootContainer(stage);
+		this.m_root = new SceneRootContainer();
 		this.m_root.addChild(this);
 	}
 

@@ -1,4 +1,4 @@
-import { Assets, Container, Sprite } from "pixi.js"
+import { Assets, Sprite } from "pixi.js"
 import { Scene, SceneParameter } from "../core/scene";
 import { GameInput } from "../input/game_input";
 
@@ -10,8 +10,8 @@ export class TestScene extends Scene {
 	private s2: Sprite[] = [];
 	private m_character: Sprite | null = null;
 
-	public constructor(stage: Container) {
-		super(stage);
+	public constructor() {
+		super();
 	}
 
 	getStaticResources(): { alias: string, src: string }[] {

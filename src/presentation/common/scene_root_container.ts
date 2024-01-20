@@ -9,10 +9,10 @@ import { PresentationServiceLocator } from "../core/presentation_service_locator
  * screenOrigin, screenSize を活用する
  */
 export class SceneRootContainer extends Container {
-	public constructor(stage: Container) {
+	public constructor() {
 		super();
 
-		stage.addChild(this);
+		PresentationServiceLocator.stage.addChild(this);
 		this.setPos();
 	}
 
