@@ -1,5 +1,4 @@
 import { Assets, Container, Sprite } from "pixi.js"
-import { ScreenInfo } from "../utilities/screen_info"
 import { Scene, SceneParameter } from "../core/scene";
 import { GameInput } from "../input/game_input";
 
@@ -11,8 +10,8 @@ export class TestScene extends Scene {
 	private s2: Sprite[] = [];
 	private m_character: Sprite | null = null;
 
-	public constructor(screen: ScreenInfo, stage: Container) {
-		super(screen, stage);
+	public constructor(stage: Container) {
+		super(stage);
 	}
 
 	getStaticResources(): { alias: string, src: string }[] {
@@ -65,8 +64,8 @@ export class TestScene extends Scene {
 		}
 	}
 
-	public onResize(screen: ScreenInfo) {
-		super.onResize(screen);
+	public onResize() {
+		super.onResize();
 		this.setSpritePos();
 	}
 

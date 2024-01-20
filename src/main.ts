@@ -9,7 +9,6 @@ import { GameInput } from "./presentation/input/game_input";
 import { KeyboardInput } from "./presentation/input/keyboard_input";
 
 class Proj2024 {
-	private m_screen: ScreenInfo;
 	private m_app: Application;
 	private m_sceneController: SceneController;
 
@@ -23,15 +22,15 @@ class Proj2024 {
 	}
 
 	public constructor() {
-		this.m_screen = new ScreenInfo(window.innerWidth, window.innerHeight);
+		PresentationServiceLocator.screenInfo = new ScreenInfo(window.innerWidth, window.innerHeight);
 
 		// pixi.js 初期化
 		this.m_app = new Application({
 			background: 0xFF00FF,
 			antialias: false,
 			backgroundAlpha: 1,
-			width: this.m_screen.size.width,
-			height: this.m_screen.size.height,
+			width: PresentationServiceLocator.screenInfo.size.width,
+			height: PresentationServiceLocator.screenInfo.size.height,
 		});
 
 		// キャンバス設置
@@ -52,21 +51,23 @@ class Proj2024 {
 		PresentationServiceLocator.gameInput = new GameInput();
 
 		// シーン登録
-		this.m_sceneController = new SceneController(new TestScene(this.m_screen, this.m_app.stage));
+		this.m_sceneController = new SceneController(new TestScene(this.m_app.stage));
 
 		// 更新メソッド登録
 		this.m_app.ticker.add(delta => this.update(delta));
 	}
 
+	// TODO: onUpdate にリネーム
 	public async update(delta: number) {
 		PresentationServiceLocator.keyboardInput.onUpdate();
 		this.m_sceneController.onUpdate(delta);
 	}
 
 	public onResize() {
-		this.m_screen = new ScreenInfo(window.innerWidth, window.innerHeight);
-		this.m_app.renderer.resize(this.m_screen.size.width, this.m_screen.size.height);
-		this.m_sceneController.onResize(this.m_screen);
+		PresentationServiceLocator.screenInfo = new ScreenInfo(window.innerWidth, window.innerHeight);
+		this.m_app.renderer.resize(PresentationServiceLocator.screenInfo.size.width,
+			PresentationServiceLocator.screenInfo.size.height);
+		this.m_sceneController.onResize();
 	}
 }
 

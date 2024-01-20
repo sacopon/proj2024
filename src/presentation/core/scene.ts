@@ -1,6 +1,5 @@
 import { Container } from "pixi.js";
 import { SceneRootContainer } from "../common/scene_root_container";
-import { ScreenInfo } from "../utilities/screen_info";
 import { Position, Size } from "./types";
 import { PresentationServiceLocator } from "./presentation_service_locator";
 
@@ -14,10 +13,10 @@ export abstract class SceneParameter {
 export abstract class Scene extends Container {
 	private m_root: SceneRootContainer;
 
-	// TODO: 引数の2つは ServiceLocator に入れてしまう
-	public constructor(screen: ScreenInfo, stage: Container) {
+	// TODO: 引数は ServiceLocator に入れてしまう
+	public constructor(stage: Container) {
 		super();
-		this.m_root = new SceneRootContainer(screen, stage);
+		this.m_root = new SceneRootContainer(stage);
 		this.m_root.addChild(this);
 	}
 
@@ -88,7 +87,7 @@ export abstract class Scene extends Container {
 	 *
 	 * @param screen 画面情報
 	 */
-	public onResize(screen: ScreenInfo) {
-		this.m_root.onResize(screen);
+	public onResize() {
+		this.m_root.onResize();
 	};
 }
