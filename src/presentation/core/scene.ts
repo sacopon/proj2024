@@ -1,7 +1,7 @@
 import { Container } from "pixi.js";
-import { SceneRootContainer, ScreenInfo } from "../common/scene_root_container";
-import { Screen } from "../utilities/screen";
-import { Position } from "./types";
+import { SceneRootContainer } from "../common/scene_root_container";
+import { ScreenInfo } from "../utilities/screen_info";
+import { Position, Size } from "./types";
 
 export abstract class SceneParameter {
 }
@@ -14,7 +14,7 @@ export abstract class Scene extends Container {
 	private m_root: SceneRootContainer;
 
 	// TODO: 引数の2つは ServiceLocator に入れてしまう
-	public constructor(screen: Screen, stage: Container) {
+	public constructor(screen: ScreenInfo, stage: Container) {
 		super();
 		this.m_root = new SceneRootContainer(screen, stage);
 		this.m_root.addChild(this);
@@ -31,7 +31,7 @@ export abstract class Scene extends Container {
 	 * 実画面の座標/サイズを返す
 	 * セーフエリア外にオブジェクトを表示したい場合に使用する
 	 */
-	public get screen(): ScreenInfo {
+	public get screen(): Position & Size {
 		return this.m_root.screen;
 	}
 
@@ -95,7 +95,7 @@ export abstract class Scene extends Container {
 	 *
 	 * @param screen 画面情報
 	 */
-	public onResize(screen: Screen) {
+	public onResize(screen: ScreenInfo) {
 		this.m_root.onResize(screen);
 	};
 }

@@ -1,9 +1,7 @@
 import { Container } from "pixi.js";
-import { Position, Size } from "../core/types";
-import { Screen } from "../utilities/screen";
+import { Position } from "../core/types";
+import { ScreenInfo } from "../utilities/screen_info";
 import { PresentationServiceLocator } from "../core/presentation_service_locator";
-
-export type ScreenInfo = Position & Size;
 
 /**
  * シーンの最上段に置かれたコンテナ
@@ -12,9 +10,9 @@ export type ScreenInfo = Position & Size;
  * screenOrigin, screenSize を活用する
  */
 export class SceneRootContainer extends Container {
-	private m_screen: Screen;
+	private m_screen: ScreenInfo;
 
-	public constructor(screen: Screen, stage: Container) {
+	public constructor(screen: ScreenInfo, stage: Container) {
 		super();
 		this.m_screen = screen;
 
@@ -22,7 +20,7 @@ export class SceneRootContainer extends Container {
 		this.setPos(this.m_screen);
 	}
 
-	public onResize(screen: Screen) {
+	public onResize(screen: ScreenInfo) {
 		this.m_screen = screen;
 		this.setPos(this.m_screen);
 	}
@@ -41,7 +39,7 @@ export class SceneRootContainer extends Container {
 	 * 実画面の座標/サイズを返す
 	 * セーフエリア外にオブジェクトを表示したい場合に使用する
 	 */
-	public get screen(): ScreenInfo {
+	public get screen() {
 		return {
 			x: -this.x,
 			y: -this.y,
@@ -59,7 +57,7 @@ export class SceneRootContainer extends Container {
 		return PresentationServiceLocator.keyCode;
 	}
 
-	private setPos(screen: Screen) {
+	private setPos(screen: ScreenInfo) {
 		this.x = screen.safeArea.x;
 		this.y = screen.safeArea.y;
 	}

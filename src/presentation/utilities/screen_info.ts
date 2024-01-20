@@ -2,9 +2,8 @@ import { Size, SafeArea } from "../core/types";
 
 /**
  * 画面サイズに関わる設定とその値の保持
- * TODO: 名前が標準のクラスと被っているので変更する
  */
-export class Screen {
+export class ScreenInfo {
 	private static readonly SAFE_AREA_WIDTH = 1280;
 	private static readonly SAFE_AREA_HEIGHT = 720;
 	private static readonly MAXIMUM_HEIGHT = 800;
@@ -16,8 +15,8 @@ export class Screen {
 	public constructor(innerWidth: number, innerHeight: number) {
 		this.m_innerWidth = innerWidth;
 		this.m_innerHeight = innerHeight;
-		this.m_screenSize = Screen.calculateScreenSize(this.m_innerWidth, this.m_innerHeight);
-		this.m_safeArea = Screen.calculateSafeArea(this.m_screenSize);
+		this.m_screenSize = ScreenInfo.calculateScreenSize(this.m_innerWidth, this.m_innerHeight);
+		this.m_safeArea = ScreenInfo.calculateSafeArea(this.m_screenSize);
 	}
 
 	public get size(): {width: number, height: number} {
@@ -51,7 +50,7 @@ export class Screen {
 		// 16:9 より細長い場合は縦720pxを基準に画面サイズを設定
 		// それより太い場合は縦800pxを基準に画面サイズを設定
 		const aspect_ratio = Math.max(innerWidth / innerHeight, 16 / 10);
-		const height = aspect_ratio < 16 / 9 ? Screen.MAXIMUM_HEIGHT : Screen.SAFE_AREA_HEIGHT;
+		const height = aspect_ratio < 16 / 9 ? ScreenInfo.MAXIMUM_HEIGHT : ScreenInfo.SAFE_AREA_HEIGHT;
 
 		return {
 			width: Math.floor(height * aspect_ratio),
@@ -63,21 +62,21 @@ export class Screen {
 	 * 実画面サイズから、必ず表示される領域の位置、サイズを計算する
 	 */
 	private static calculateSafeArea(screenSize: Size): SafeArea {
-		const x = Math.floor((screenSize.width  - Screen.SAFE_AREA_WIDTH) / 2);
-		const y = Math.floor((screenSize.height -  Screen.SAFE_AREA_HEIGHT) / 2);
+		const x = Math.floor((screenSize.width  - ScreenInfo.SAFE_AREA_WIDTH) / 2);
+		const y = Math.floor((screenSize.height -  ScreenInfo.SAFE_AREA_HEIGHT) / 2);
 
 		return {
 			x,
 			y,
-			width: Screen.SAFE_AREA_WIDTH,
-			height: Screen.SAFE_AREA_HEIGHT,
+			width: ScreenInfo.SAFE_AREA_WIDTH,
+			height: ScreenInfo.SAFE_AREA_HEIGHT,
 			left: x,
 			top: y,
-			right: x + Screen.SAFE_AREA_WIDTH,
-			bottom: y + Screen.SAFE_AREA_HEIGHT,
+			right: x + ScreenInfo.SAFE_AREA_WIDTH,
+			bottom: y + ScreenInfo.SAFE_AREA_HEIGHT,
 			center: {
-				x: x + Math.floor(Screen.SAFE_AREA_WIDTH  / 2),
-				y: y + Math.floor(Screen.SAFE_AREA_HEIGHT / 2),
+				x: x + Math.floor(ScreenInfo.SAFE_AREA_WIDTH  / 2),
+				y: y + Math.floor(ScreenInfo.SAFE_AREA_HEIGHT / 2),
 			},
 		};
 	}

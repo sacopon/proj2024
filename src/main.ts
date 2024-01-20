@@ -1,6 +1,6 @@
 import { Application, Sprite, Assets, Container } from "pixi.js";
 import init, { greet } from "../wasm/pkg";
-import { Screen } from "./presentation/utilities/screen";
+import { ScreenInfo } from "./presentation/utilities/screen_info";
 import { disableTouchEvent, disableOuterCanvasTouchEvent } from "./presentation/utilities/disable_touch_event";
 import { KeyboardInput } from "./presentation/input/keyboard_input";
 import { TestScene } from "./presentation/common/test_scene";
@@ -8,7 +8,7 @@ import { PresentationServiceLocator } from "./presentation/core/presentation_ser
 import { SceneController } from "./presentation/core/scene_controller";
 
 class Proj2024 {
-	private m_screen: Screen;
+	private m_screen: ScreenInfo;
 	private m_app: Application;
 	private m_sceneController: SceneController;
 	private m_keyboard = new KeyboardInput();
@@ -23,7 +23,7 @@ class Proj2024 {
 	}
 
 	public constructor() {
-		this.m_screen = new Screen(window.innerWidth, window.innerHeight);
+		this.m_screen = new ScreenInfo(window.innerWidth, window.innerHeight);
 
 		// pixi.js 初期化
 		this.m_app = new Application({
@@ -35,7 +35,7 @@ class Proj2024 {
 		});
 
 		// キャンバス設置
-		document.body.appendChild(Screen.setToCenter(this.m_app.view as HTMLCanvasElement));
+		document.body.appendChild(ScreenInfo.setToCenter(this.m_app.view as HTMLCanvasElement));
 		// OS 由来のタッチイベント排除
 		disableTouchEvent(this.m_app.view as unknown as HTMLElement);
 		disableOuterCanvasTouchEvent();
@@ -61,7 +61,7 @@ class Proj2024 {
 	}
 
 	public onResize() {
-		this.m_screen = new Screen(window.innerWidth, window.innerHeight);
+		this.m_screen = new ScreenInfo(window.innerWidth, window.innerHeight);
 		this.m_app.renderer.resize(this.m_screen.size.width, this.m_screen.size.height);
 		this.m_sceneController.onResize(this.m_screen);
 	}

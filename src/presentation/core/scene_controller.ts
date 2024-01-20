@@ -1,5 +1,5 @@
 import { Scene, SceneParameter } from "./scene";
-import { Screen } from "../utilities/screen";
+import { ScreenInfo } from "../utilities/screen_info";
 import { Assets } from "pixi.js";
 
 /**
@@ -19,7 +19,7 @@ export class SceneController {
 		this.m_nextScene = initialScene;
 	}
 
-	public onResize(screen: Screen) {
+	public onResize(screen: ScreenInfo) {
 		return this.m_currentScene!.onResize(screen);
 	};
 
