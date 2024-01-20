@@ -1,26 +1,28 @@
-import { Assets, Container, Sprite } from "pixi.js"
-import { Screen } from "../utilities/screen"
-import { SceneRootContainer } from "./scene_root_container"
+import { Assets, Sprite } from "pixi.js"
+import { Scene, SceneParameter } from "../core/scene";
+import { GameInput } from "../input/game_input";
 
-export class TestScene extends SceneRootContainer {
+/**
+ * テスト用のシーン
+ */
+export class TestScene extends Scene {
 	private m_sprite: Sprite | null = null;
 	private s2: Sprite[] = [];
 	private m_character: Sprite | null = null;
 
-	public constructor(screen: Screen, stage: Container) {
-		super(screen, stage);
+	public constructor() {
+		super();
 	}
 
-	public async request() {
-		Assets.addBundle("resources", [
+	getStaticResources(): { alias: string, src: string }[] {
+		return [
 			{ alias: "neko", src: "/images/neko.jpg" },
 			{ alias: "s", src: "/images/s.png" },
 			{ alias: "characters", src: "/images/characters.json" },
-		]);
-		await Assets.loadBundle("resources");
+		];
 	}
 
-	public async onEnter() {
+	public async onEnter(_: SceneParameter): Promise<void> {
 		this.m_sprite = Sprite.from(Assets.get("neko"));
 		this.addChild(this.m_sprite);
 
@@ -42,28 +44,28 @@ export class TestScene extends SceneRootContainer {
 		this.m_character.y = this.center.y - Math.floor(this.m_character.height / 2);
 	}
 
-	public onUpdate(delta: number) {
+	public onUpdate(_: number) {
 		const character = this.m_character!;
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_UP)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_UP)) {
 			character.texture = Assets.get("characters").textures["chara1_up_1.png"];
 		}
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_DOWN)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_DOWN)) {
 			character.texture = Assets.get("characters").textures["chara1_down_1.png"];
 		}
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_LEFT)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_LEFT)) {
 			character.texture = Assets.get("characters").textures["chara1_left_1.png"];
 		}
 
-		if (this.keyboard.isTriggered(this.keyCode.KEY_RIGHT)) {
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_RIGHT)) {
 			character.texture = Assets.get("characters").textures["chara1_right_1.png"];
 		}
 	}
 
-	public onResize(screen: Screen) {
-		super.onResize(screen);
+	public onResize() {
+		super.onResize();
 		this.setSpritePos();
 	}
 
