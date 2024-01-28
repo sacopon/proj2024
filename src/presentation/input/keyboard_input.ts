@@ -7,6 +7,9 @@ export enum KeyboardInputKeyCode {
 	KEY_X       = 0x01 << 5,
 }
 
+/**
+ * TODO: KeyboardInputDetector にリネームする
+ */
 export class KeyboardInput {
 	private m_upKeys: String[];
 	private m_downKeys: String[];

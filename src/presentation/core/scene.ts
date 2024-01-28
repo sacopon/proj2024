@@ -2,6 +2,7 @@ import { Container } from "pixi.js";
 import { SceneRootContainer } from "../common/scene_root_container";
 import { Position, Size } from "./types";
 import { PresentationServiceLocator } from "./presentation_service_locator";
+import { SceneController } from "./scene_controller";
 
 export abstract class SceneParameter {
 }
@@ -12,11 +13,13 @@ export abstract class SceneParameter {
  */
 export abstract class Scene extends Container {
 	private m_root: SceneRootContainer;
+	private m_sceneController: SceneController;
 
-	public constructor() {
+	public constructor(sceneController: SceneController) {
 		super();
+
 		this.m_root = new SceneRootContainer();
-		this.m_root.addChild(this);
+		this.m_sceneController = sceneController;
 	}
 
 	/**
@@ -45,7 +48,7 @@ export abstract class Scene extends Container {
 	 * @param params 前のシーンから引き継いだ情報
 	 * @returns params に、このメソッドで取得した情報を加えたもの
 	 */
-	public async request(params: SceneParameter): Promise<SceneParameter> {
+	public async request(params: SceneParameter | null = null): Promise<SceneParameter|null> {
 		return Promise.resolve(params);
 	}
 
@@ -61,23 +64,36 @@ export abstract class Scene extends Container {
 	// TODO: getDynamicResources() も必要
 
 	/**
+	 * 他のシーンへの遷移
+	 */
+	public goTo(sceneName: string, param: SceneParameter | null = null) {
+		this.m_sceneController.changScene(sceneName, param);
+	}
+
+	/**
 	 * シーンの変更から onUpdate() 呼び出しの前に一度だけ呼び出される処理
 	 *
 	 * @param param 遷移元シーンから引き継いだパラメータ
 	 * @returns Promise 画面転換の演出などを行う場合も見込んで Promise を返す
 	 */
-	public async onEnter(param: SceneParameter): Promise<void> {
-		return Promise.resolve();
+	public async onEnter(param: SceneParameter | null): Promise<void> {
+		this.m_root.addChild(this);
+		return this.processOnEnter(param);
 	}
 
-	// TODO: onLeave() も必要
+	public async onLeave(): Promise<void> {
+		await this.processOnLeave();
+		this.removeChildren()
+		this.removeFromParent();
+	}
 
 	/**
 	 * フレーム更新処理
 	 *
 	 * @param delta 前回の呼び出しからの経過時間(ミリ秒)
 	 */
-	public onUpdate(_: number): void {
+	public onUpdate(delta: number): void {
+		this.processOnUpdate(delta);
 	}
 
 	/**
@@ -88,5 +104,24 @@ export abstract class Scene extends Container {
 	 */
 	public onResize() {
 		this.m_root.onResize();
+		this.processOnResize();
 	};
+
+	/**
+	 * onEnter() 時に内部で呼び出される派生クラスでオーバーライドする実装
+	 *
+	 * @param param 遷移元シーンから引き継いだパラメータ
+	 * @returns Promise 画面転換の演出などを行う場合も見込んで Promise を返す
+	 */
+	protected abstract processOnEnter(param: SceneParameter | null): Promise<void>;
+
+	/**
+	 * onLeave() 時に内部で呼び出される派生クラスでオーバーライドする実装
+	 *
+	 * @returns Promise 画面転換の演出などを行う場合も見込んで Promise を返す
+	 */
+	protected abstract processOnLeave(): Promise<void>;
+
+	protected abstract processOnUpdate(delta: number): void;
+	protected abstract processOnResize(): void;
 }

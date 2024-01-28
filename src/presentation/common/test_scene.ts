@@ -1,6 +1,7 @@
 import { Assets, Sprite } from "pixi.js"
 import { Scene, SceneParameter } from "../core/scene";
 import { GameInput } from "../input/game_input";
+import { SceneController } from "../core/scene_controller";
 
 /**
  * テスト用のシーン
@@ -10,11 +11,11 @@ export class TestScene extends Scene {
 	private s2: Sprite[] = [];
 	private m_character: Sprite | null = null;
 
-	public constructor() {
-		super();
+	public constructor(sceneController: SceneController) {
+		super(sceneController);
 	}
 
-	getStaticResources(): { alias: string, src: string }[] {
+	public getStaticResources(): { alias: string, src: string }[] {
 		return [
 			{ alias: "neko", src: "/images/neko.jpg" },
 			{ alias: "s", src: "/images/s.png" },
@@ -22,7 +23,8 @@ export class TestScene extends Scene {
 		];
 	}
 
-	public async onEnter(_: SceneParameter): Promise<void> {
+	protected async processOnEnter(params: SceneParameter): Promise<void> {
+		console.log("TestScene#onEnter");
 		this.m_sprite = Sprite.from(Assets.get("neko"));
 		this.addChild(this.m_sprite);
 
@@ -44,7 +46,13 @@ export class TestScene extends Scene {
 		this.m_character.y = this.center.y - Math.floor(this.m_character.height / 2);
 	}
 
-	public onUpdate(_: number) {
+	protected async processOnLeave(): Promise<void> {
+		this.s2 = [];
+		this.m_sprite = null;
+		this.m_character = null;
+	}
+
+	protected processOnUpdate(delta: number): void {
 		const character = this.m_character!;
 
 		if (this.gameInput.isTriggered(GameInput.Key.KEY_UP)) {
@@ -62,10 +70,13 @@ export class TestScene extends Scene {
 		if (this.gameInput.isTriggered(GameInput.Key.KEY_RIGHT)) {
 			character.texture = Assets.get("characters").textures["chara1_right_1.png"];
 		}
+
+		if (this.gameInput.isTriggered(GameInput.Key.KEY_BUTTON1)) {
+			this.goTo('test2');
+		}
 	}
 
-	public onResize() {
-		super.onResize();
+	protected processOnResize(): void {
 		this.setSpritePos();
 	}
 

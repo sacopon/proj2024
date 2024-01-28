@@ -1,21 +1,35 @@
 import { Scene, SceneParameter } from "./scene";
 import { Assets } from "pixi.js";
+import { SceneRepositoryInterface } from "./scene_repository";
 
 /**
  * 現在のシーンと、シーンの遷移を司るクラス
  */
 export class SceneController {
+	private m_sceneRepositoryInterface: SceneRepositoryInterface;
 	private m_currentScene: Scene | null;
-	private m_nextScene: Scene | null;
+	// TODO: 別クラスに括り出し
+	private m_nextSceneName: string | null;
+	private m_nextSceneParams: SceneParameter | null;
 
 	/**
 	 * コンストラクタ
 	 *
-	 * @param initialScene 最初のシーン
+	 * @param initialSceneName 最初のシーン
 	 */
-	public constructor(initialScene: Scene) {
+	public constructor(sceneRepository: SceneRepositoryInterface, initialSceneName: string) {
 		this.m_currentScene = null;
-		this.m_nextScene = initialScene;
+		this.m_nextSceneName = initialSceneName;
+		this.m_nextSceneParams = null;
+		this.m_sceneRepositoryInterface = sceneRepository;
+	}
+
+	/**
+	 * シーンを遷移する
+	 */
+	public changScene(name: string, params: SceneParameter | null = null) {
+		this.m_nextSceneName = name;
+		this.m_nextSceneParams = params;
 	}
 
 	public onResize() {
@@ -26,18 +40,22 @@ export class SceneController {
 	 * フレーム更新処理
 	 */
 	public async onUpdate(delta: number) {
-		if (this.m_nextScene) {
-			this.m_currentScene = this.m_nextScene;
-			this.m_nextScene = null;
-			Assets.addBundle("resources", this.m_currentScene.getStaticResources());
+		if (this.m_nextSceneName) {
+			const nextSceneParams = this.m_nextSceneParams;
+			const nextScene = this.m_sceneRepositoryInterface.getScene(this.m_nextSceneName);
+			this.m_nextSceneName = this.m_nextSceneParams = null;
+
+			const resources = nextScene.getStaticResources().filter(res => !Assets.cache.has(res.alias));
+			Assets.addBundle("resources", resources);
 			await Assets.loadBundle("resources");
 
-			// TODO: request の引数は前のシーンから取得する
-			const params = await this.m_currentScene.request({});
-			await this.m_currentScene.onEnter(params);
+			const onEnterParams = await nextScene.request(nextSceneParams);
+			await this.m_currentScene?.onLeave();
+			await nextScene.onEnter(onEnterParams);
+			this.m_currentScene = nextScene;
 		}
 
-		this.m_currentScene!.onUpdate(delta);
+		this.m_currentScene?.onUpdate(delta);
 	}
 
 }
