@@ -28,8 +28,8 @@ export class GameInput {
 		this.m_keyboardKeyByGameKey.set(Key.KEY_DOWN,    KeyboardInputKeyCode.ARROW_DOWN);
 		this.m_keyboardKeyByGameKey.set(Key.KEY_LEFT,    KeyboardInputKeyCode.ARROW_LEFT);
 		this.m_keyboardKeyByGameKey.set(Key.KEY_RIGHT,   KeyboardInputKeyCode.ARROW_RIGHT);
-		this.m_keyboardKeyByGameKey.set(Key.KEY_BUTTON1, KeyboardInputKeyCode.KEY_X);
-		this.m_keyboardKeyByGameKey.set(Key.KEY_BUTTON2, KeyboardInputKeyCode.KEY_Z);
+		this.m_keyboardKeyByGameKey.set(Key.KEY_BUTTON1, KeyboardInputKeyCode.KEY_Z);
+		this.m_keyboardKeyByGameKey.set(Key.KEY_BUTTON2, KeyboardInputKeyCode.KEY_X);
 
 		this.m_keyboard = PresentationServiceLocator.keyboardInput;
 	}

@@ -2,6 +2,8 @@ import { Container } from "pixi.js";
 import { GameInput } from "../input/game_input";
 import { KeyboardInput } from "../input/keyboard_input";
 import { ScreenInfo } from "../utilities/screen_info";
+import { SceneRepositoryInterface } from "./scene_repository";
+import { SceneController } from "./scene_controller";
 
 export class PresentationServiceLocator {
 	private static m_screenInfo: ScreenInfo | null = null;

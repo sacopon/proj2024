@@ -7,6 +7,8 @@ import { PresentationServiceLocator } from "./presentation/core/presentation_ser
 import { SceneController } from "./presentation/core/scene_controller";
 import { GameInput } from "./presentation/input/game_input";
 import { KeyboardInput } from "./presentation/input/keyboard_input";
+import { SceneRespository } from "./presentation/core/scene_repository";
+import { TestScene2 } from "./presentation/common/test_scene_2";
 
 class Proj2024 {
 	private m_app: Application;
@@ -53,8 +55,15 @@ class Proj2024 {
 		// 統一入力
 		PresentationServiceLocator.gameInput = new GameInput();
 
-		// シーン登録
-		this.m_sceneController = new SceneController(new TestScene());
+		// シーンリポジトリ準備
+		const sceneRepository = new SceneRespository();
+
+		// シーン管理
+		this.m_sceneController = new SceneController(sceneRepository, "test1");
+
+		// 各シーンの生成
+		sceneRepository.addScene("test1", new TestScene(this.m_sceneController));
+		sceneRepository.addScene("test2", new TestScene2(this.m_sceneController));
 
 		// 更新メソッド登録
 		this.m_app.ticker.add(delta => this.update(delta));
